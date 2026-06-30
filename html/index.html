@@ -2,9 +2,207 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow - Ad Servitium Paratus</title>
+    <style>
+        /* Modern System Font Stack & Deep Dark Palette */
+        :root {
+            --bg-color: #09090b;
+            --card-bg: #121216;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --glow-color: rgba(147, 51, 234, 0.4); /* Sleek violet */
+            --accent-color: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Ambient background glow */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        /* Container Layout */
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 24px;
+            background: rgba(18, 18, 22, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInContainer 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Abstract SVG Avatar Styling */
+        .avatar-wrapper {
+            margin-bottom: 2rem;
+            display: inline-block;
+            position: relative;
+        }
+
+        .avatar-svg {
+            width: 140px;
+            height: 140px;
+            filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6));
+        }
+
+        /* SVG Ring Orbit Animation */
+        .orbit-ring {
+            transform-origin: center;
+            animation: rotateRing 20s linear infinite;
+        }
+
+        .orbit-ring-reverse {
+            transform-origin: center;
+            animation: rotateRingReverse 25s linear infinite;
+        }
+
+        /* Core Pulse Animation */
+        .core-sphere {
+            transform-origin: center;
+            animation: pulseCore 4s ease-in-out infinite alternate;
+        }
+
+        /* Typography & Text Effects */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slogan {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            opacity: 0;
+            white-space: nowrap;
+            border-right: 2px solid var(--accent-color);
+            width: 0;
+            margin: 0 auto;
+            animation: 
+                typing 2s steps(21) 1s forwards,
+                blink 0.75s step-end infinite alternate,
+                removeCursor 0.5s step-end 3.5s forwards;
+        }
+
+        /* Keyframes */
+        @keyframes fadeInContainer {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        @keyframes rotateRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateRingReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes pulseCore {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+
+        @keyframes typing {
+            from { width: 0; opacity: 1; }
+            to { width: 100%; opacity: 1; }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent-color); }
+        }
+
+        @keyframes removeCursor {
+            to { border-color: transparent; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to oc.nagaev.me</h1>
+
+    <div class="ambient-glow"></div>
+
+    <div class="container">
+        <!-- Inline Animated SVG Avatar -->
+        <div class="avatar-wrapper">
+            <svg class="avatar-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Geometry Layer -->
+                <circle class="orbit-ring" cx="50" cy="50" r="42" stroke="url(#gradient-accent)" stroke-width="1" stroke-dasharray="4 8" opacity="0.6"/>
+                <circle class="orbit-ring-reverse" cx="50" cy="50" r="36" stroke="url(#gradient-accent)" stroke-width="1.5" stroke-dasharray="20 10" opacity="0.4"/>
+                
+                <!-- Shield/Shadow Core Shapes -->
+                <g class="core-sphere">
+                    <path d="M50 18L72 32V58L50 82L28 58V32L50 18Z" fill="url(#gradient-core)" opacity="0.15" />
+                    <!-- Central Neural Core Node -->
+                    <circle cx="50" cy="50" r="12" fill="url(#gradient-accent)" />
+                    <circle cx="50" cy="50" r="6" fill="#ffffff" opacity="0.7" />
+                </g>
+
+                <!-- Color Defs -->
+                <defs>
+                    <linearGradient id="gradient-accent" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#c084fc" />
+                        <stop offset="100%" stop-color="#6366f1" />
+                    </linearGradient>
+                    <linearGradient id="gradient-core" x1="50" y1="18" x2="50" y2="82" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#a855f7" />
+                        <stop offset="100%" stop-color="#000000" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Identity Elements -->
+        <h1>Shadow</h1>
+        <div class="slogan">Ad servitium paratus</div>
+    </div>
+
 </body>
 </html>
