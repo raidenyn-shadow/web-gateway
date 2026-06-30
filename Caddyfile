@@ -13,11 +13,13 @@ oc.nagaev.me {
     handle {
         root * /usr/share/caddy
 
-        # If the requested path is NOT an actual file/folder, redirect to root via 302
-        @not_found not file {path} {path}/
+        # Bulletproof matcher: Must NOT be the root path, and the file must NOT exist
+        @not_found {
+            not path /
+            not file {path} {path}/
+        }
         redir @not_found / 302
 
-        # Otherwise, serve the static files (like /index.html itself or images/css)
         file_server
     }
 }
