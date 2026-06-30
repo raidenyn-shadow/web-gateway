@@ -1,0 +1,23 @@
+oc.nagaev.me {
+    # Configure the DNS challenge via Cloudflare
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+    }
+
+    # Route only /control (and anything under it like /control/assets) to port 18789
+    handle /control* {
+        reverse_proxy 127.0.0.1:18789
+    }
+
+    # Fallback: Handle everything else with a 404 error
+    handle {
+        root * /usr/share/caddy
+
+        # If the requested path is NOT an actual file/folder, redirect to root via 302
+        @not_found not file {path} {path}/
+        redir @not_found / 302
+
+        # Otherwise, serve the static files (like /index.html itself or images/css)
+        file_server
+    }
+}

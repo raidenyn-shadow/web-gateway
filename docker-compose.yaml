@@ -1,0 +1,17 @@
+services:
+  caddy:
+    build: .
+    container_name: caddy
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./html:/usr/share/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
