@@ -1,25 +1,43 @@
+{
+	security {
+		oauth identity provider google {
+			realm google
+			driver google
+			client_id {env.GOOGLE_OAUTH_CLIENT_ID}
+			client_secret {env.GOOGLE_OAUTH_CLIENT_SECRET}
+			scopes openid email profile
+		}
+
+		authentication portal opencode_portal {
+			crypto default token lifetime 3600
+			crypto key sign-verify {env.JWT_SHARED_KEY}
+			enable identity provider google
+		}
+
+		authorization policy opencode_policy {
+			crypto key verify {env.JWT_SHARED_KEY}
+			set auth url /auth
+			allow roles authp/user
+		}
+	}
+}
+
 oc.nagaev.me {
-    # Configure the DNS challenge via Cloudflare
     tls {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
     }
 
-    # Route only /control (and anything under it like /control/assets) to port 18789
     handle /control* {
         reverse_proxy 127.0.0.1:18789
     }
 
-    # Fallback: Handle everything else with a 404 error
     handle {
         root * /usr/share/caddy
-
-        # Bulletproof matcher: Must NOT be the root path, and the file must NOT exist
         @not_found {
             not path /
             not file {path} {path}/
         }
         redir @not_found / 302
-
         file_server
     }
 }
@@ -29,5 +47,12 @@ opencode.nagaev.me {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
     }
 
-    reverse_proxy 127.0.0.1:4096
+    route /auth* {
+        authenticate with opencode_portal
+    }
+
+    route {
+        authorize with opencode_policy
+        reverse_proxy 127.0.0.1:4096
+    }
 }

@@ -6,6 +6,9 @@ services:
     network_mode: host
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID}
+      - GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET}
+      - JWT_SHARED_KEY=${JWT_SHARED_KEY}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./html:/usr/share/caddy
