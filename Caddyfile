@@ -24,6 +24,7 @@
 		authorization policy opencode_policy {
 			crypto key verify {env.JWT_SHARED_KEY}
 			set auth url /auth
+			disable auth redirect query
 			acl rule {
 				comment allow specific email
 				match email nagaev.yuri@gmail.com
