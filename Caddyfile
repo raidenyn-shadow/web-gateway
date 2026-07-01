@@ -17,6 +17,8 @@
 				match realm google
 				action add role authp/user
 			}
+
+			trust login redirect uri domain exact opencode.nagaev.me path /
 		}
 
 		authorization policy opencode_policy {
