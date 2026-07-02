@@ -18,13 +18,12 @@
 				action add role authp/user
 			}
 
-			trust login redirect uri domain exact opencode.nagaev.me path /
+			trust login redirect uri domain exact opencode.nagaev.me path /auth
 		}
 
 		authorization policy opencode_policy {
 			crypto key verify {env.JWT_SHARED_KEY}
-			set auth url /auth
-			disable auth redirect query
+			set auth url /oauth-proxy/auth
 			acl rule {
 				comment allow specific email
 				match email nagaev.yuri@gmail.com
@@ -60,7 +59,21 @@ opencode.nagaev.me {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
     }
 
-    route /auth* {
+    # OAuth proxy entry point: /oauth-proxy/* → strip prefix → /auth* → authenticate portal
+    handle_path /oauth-proxy/* {
+        authenticate with opencode_portal
+    }
+
+    # Portal internal paths: the plugin redirects to /auth/login, serves
+    # assets at /auth/assets/, callbacks at /auth/oauth2/google/, etc.
+    # Route all plugin-specific paths to the authenticate portal.
+    # OpenCode's own /auth and /auth/token pass through to the backend.
+    @portalPaths path /auth/login /auth/portal* /auth/oauth2/* /auth/sandbox/* /auth/register* /auth/recover* /auth/whoami /auth/forgot* /auth/basic/* /auth/assets/*
+    handle @portalPaths {
+        authenticate with opencode_portal
+    }
+
+    handle /auth/logout {
         authenticate with opencode_portal
     }
 
